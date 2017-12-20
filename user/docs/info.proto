@@ -1,0 +1,16 @@
+	syntax = "proto3";
+	package info;
+
+	message InfoReq {
+	int64 ID = 1;
+	}
+
+	message InfoRep {
+	string retCode = 1;
+	string retMsg = 2;
+	}
+
+
+	service Info {
+	rpc GetInfo(InfoReq) returns (InfoRep);
+	}

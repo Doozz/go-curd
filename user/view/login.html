@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>登陆</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <script type="text/javascript" src="/js/auto_rem.js"></script>
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/public.js"></script>
+    <script type="text/javascript" src="/js/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.validate.messages_zh.js"></script>
+    <script type="text/javascript" src="/js/fastclick.js"></script>
+    <link rel="stylesheet" href="/css/style.css" />
+</head>
+
+<body>
+    <header class="fixed top-nav">
+        <span class="title">登陆</span>
+        <a class="nav-icon link right" href="/user/reg">[注册]</a>
+    </header>
+    <div class="login-regist-body">
+    <form>
+        <div class="container">
+            <div class="row">
+                <input type="text" placeholder="请输入账号" name="username" />
+            </div>
+            <div class="row">
+                <input type="password" placeholder="请输入密码" name="pass" />
+            </div>
+            <input type="submit" value="登入" class="btn">
+        </div>
+        </form>
+    </div>
+</body>
+
+</html>
+<script>
+$(document).ready(function() {
+    $("form").validate({
+        debug: true,
+        rules: {
+            username: {
+                required: true
+            },
+            pass: {
+                required: true
+            }
+        },
+        messages: {
+
+        },
+        submitHandler: function(form) {
+            $('form input[type="submit"]').attr('disabled', true).val('登录中...');
+            var data = $.param({rem:rem})+'&'+$('form').serialize();
+            $.ajax({
+                type: 'post',
+                url: '/user/dologin',
+                data: data,
+                dataType: 'json',
+                success: function(res) {
+                    if (res.Code != 200) {
+                        alert(res.Data);
+                        return false;
+                    }
+                    window.location.href = '/user/index';
+                },
+                error: function() {
+                    alert('服务器错误，请重新尝试');
+                },
+                complete: function() {
+                    $('form input[type="submit"]').attr('disabled', false).val('登录');
+                }
+            });
+        }
+    });
+});
+</script>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <script type="text/javascript" src="/js/auto_rem.js"></script>
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/public.js"></script>
+    <script type="text/javascript" src="/js/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.validate.messages_zh.js"></script>
+    <script type="text/javascript" src="/js/fastclick.js"></script>
+    <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+    <header class="fixed top-nav">
+        <span class="title">注册</span>
+    </header>
+   <form action="" id="">
+    <div class="login-regist-body">
+
+        <div class="main">
+            <div class="row">
+                <input type="text" name="name" placeholder="请输入账号" />
+            </div>
+            <div class="row">
+                <input type="password" name="pass" id="pwd" placeholder="请输入密码" />
+            </div>
+            <div class="row">
+                <input type="password" name="confirm" placeholder="请确认密码" />
+            </div>
+            <div class="row">
+                <input type="text" name="mobile"  placeholder="请输入手机" />
+            </div>
+            <div class="row">
+                <input type="text" name="email"  placeholder="请输入邮箱" />
+            </div>
+            <input type="submit" value="注册" class="btn" />
+        </div>
+    </div>
+</form>
+</body>
+</html>
+<script>
+
+$(document).ready(function() {
+    $("form").validate({
+        debug: true,
+        rules: {
+            username: {
+                required: true,
+
+            },
+            pwd: {
+                required: true,
+
+            },
+            email: {
+                required: true,
+
+            },
+            mobile: {
+                required: true,
+
+            },
+            confirm: {
+                required: true,
+                equalTo: "#pwd"
+            }
+        },
+        messages: {
+            confirm: {
+                equalTo: '两次密码输入不一致'
+            }
+        },
+        submitHandler: function(form) {
+            $('form input[type="submit"]').attr('disabled', true).val('注册中...');
+            var data = $('form').serialize();
+            $.ajax({
+                type: 'post',
+                url: '/user/doreg',
+                data: data,
+                dataType: 'json',
+                success: function(res) {
+                    if (res.Code == 500) {
+                        alert(res.Data);
+                        return
+                    }
+                    alert('注册成功');
+                    // window.location.href = res.data.url;
+                },
+                error: function() {
+                    alert('服务器错误，请重新尝试');
+                },
+                complete: function() {
+                    $('form input[type="submit"]').attr('disabled', false).val('注册');
+                }
+            });
+        }
+    });
+});
+</script>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>修改密码</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <script type="text/javascript" src="/js/auto_rem.js"></script>
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/public.js"></script>
+    <script type="text/javascript" src="/js/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.validate.messages_zh.js"></script>
+    <script type="text/javascript" src="/js/fastclick.js"></script>
+    <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+    <header class="fixed top-nav">
+        <a class="nav-icon back"></a>
+        <span class="title">完善资料</span>
+    </header>
+    <div class="pwd-body">
+    <form>
+        <div class="container">
+            <div class="content">
+                <div class="row-cell">
+                    <input type="tel" placeholder="Name"  name="name" value="{{.Name}}" />
+                </div>
+                <div class="row-cell mb20 bt0">
+                    <input type="tel" placeholder="Mobile" name="mobile" value="{{.Mobile}}" />
+                </div>
+                <div class="row-cell mb30 bt0">
+                    <input type="tel" placeholder="Email" name="email" value="{{.Email}}"  />
+                </div>
+            </div>
+            <input type="submit" value="修改" class="btn">
+        </div>
+    </div>
+</form>
+</body>
+</html>
+<script>
+$(document).ready(function() {
+    $("form").validate({
+        debug: true,
+        rules: {
+            name: {
+                required: true
+            },
+            mobile: {
+                required: true
+            },
+            email: {
+                required: true
+            }
+        },
+        messages: {
+        },
+        submitHandler: function(form) {
+            $('form input[type="submit"]').attr('disabled', true).val('登录中...');
+            var data = $('form').serialize();
+            $.ajax({
+                type: 'post',
+                url: '/user/doupdata',
+                data: data,
+                dataType: 'json',
+                success: function(res) {
+                    if (res.Code != 200) {
+                        alert(res.Data);
+                        return false;
+                    }
+                   alert('ok')
+                   window.href.reload();
+                },
+                error: function() {
+                    alert('服务器错误，请重新尝试');
+                },
+                complete: function() {
+                    $('form input[type="submit"]').attr('disabled', false).val('登录');
+                }
+            });
+        }
+    });
+});
+</script>
